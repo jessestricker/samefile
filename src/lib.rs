@@ -2,11 +2,18 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 
-#[cfg(windows)]
-pub mod windows;
+#[cfg(unix)]
+pub mod unix;
+#[cfg(unix)]
+use unix as imp;
 
 #[cfg(windows)]
+pub mod windows;
+#[cfg(windows)]
 use windows as imp;
+
+#[cfg(not(any(unix, windows)))]
+compile_error!("The `samefile` crate supports the following targets: unix, windows.");
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash, Debug)]
 pub struct FileId(imp::FileId);
