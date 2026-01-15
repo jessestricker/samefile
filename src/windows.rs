@@ -43,7 +43,9 @@ fn file_id_from_handle(handle: BorrowedHandle) -> Result<FileId, io::Error> {
 
     let mut file_information = FILE_ID_INFO {
         VolumeSerialNumber: 0,
-        FileId: FILE_ID_128 { Identifier: [0; _] },
+        FileId: FILE_ID_128 {
+            Identifier: [0; 16],
+        },
     };
     let ret_val = unsafe {
         GetFileInformationByHandleEx(
