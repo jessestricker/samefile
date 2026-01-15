@@ -19,11 +19,11 @@ jobs:
       - name: Cache
         uses: Swatinem/rust-cache@401aff9a7a08acb9d27b64936a90db81024cff97 # v2.8.2
       - name: Compile
-        run: cargo build --all-targets --verbose
+        run: cargo build --all-targets --locked --verbose
       - name: Test
-        run: cargo test --all-targets --verbose
+        run: cargo test --all-targets --locked --verbose
       - name: Lint
-        run: cargo clippy --all-targets --verbose
+        run: cargo clippy --all-targets --locked --verbose
   format:
     name: Format
     runs-on: ubuntu-latest
