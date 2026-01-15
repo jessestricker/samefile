@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - name: Install Rust
         run: |
-          rustup update ${{ matrix.toolchain }}
+          rustup update ${{ matrix.toolchain }} --component clippy
           rustup default ${{ matrix.toolchain }}
       - name: Cache
         uses: Swatinem/rust-cache@401aff9a7a08acb9d27b64936a90db81024cff97 # v2.8.2
