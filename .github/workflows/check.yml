@@ -6,10 +6,9 @@ on:
     branches: [main]
 env:
   CARGO_TERM_COLOR: always
-  CARGO_TERM_VERBOSE: true
 jobs:
-  compile-and-test:
-    name: Compile & Test
+  compile-test-lint:
+    name: Compile, Test & Lint
     strategy:
       matrix:
         runs-on: [macos-latest, ubuntu-latest, windows-latest]
@@ -20,27 +19,16 @@ jobs:
       - name: Cache
         uses: Swatinem/rust-cache@401aff9a7a08acb9d27b64936a90db81024cff97 # v2.8.2
       - name: Compile
-        run: cargo build --all-targets
+        run: cargo build --all-targets --verbose
       - name: Test
-        run: cargo test
-  lint:
-    name: Lint
-    strategy:
-      matrix:
-        runs-on: [macos-latest, ubuntu-latest, windows-latest]
-    runs-on: ${{ matrix.runs-on }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - name: Cache
-        uses: Swatinem/rust-cache@401aff9a7a08acb9d27b64936a90db81024cff97 # v2.8.2
+        run: cargo test --all-targets --verbose
       - name: Lint
-        run: cargo clippy --all-targets
+        run: cargo clippy --all-targets --verbose
   format:
     name: Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - name: Clippy
-        run: cargo fmt --check --all
+      - name: Format
+        run: cargo fmt --check --all --verbose
