@@ -6,6 +6,10 @@ on:
     branches: [main]
 env:
   CARGO_TERM_COLOR: always
+permissions: {}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   compile-test-lint:
     name: Compile, Test & Lint
@@ -16,13 +20,17 @@ jobs:
     runs-on: ${{ matrix.runs-on }}
     steps:
       - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
       - name: Install Rust
+        env:
+          TOOLCHAIN: ${{ matrix.toolchain }}
         run: |
-          rustup toolchain install ${{ matrix.toolchain }} --component clippy
-          rustup default ${{ matrix.toolchain }}
+          rustup toolchain install "$TOOLCHAIN" --component clippy
+          rustup default "$TOOLCHAIN"
       - name: Cache
-        uses: Swatinem/rust-cache@401aff9a7a08acb9d27b64936a90db81024cff97 # v2.8.2
+        uses: Swatinem/rust-cache@6720f05bc48b77f96918929a9019fb2203ff71f8 # v2.0.0
       - name: Compile
         run: cargo build --all-targets --locked --verbose
       - name: Test
@@ -34,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
       - name: Format
         run: cargo fmt --check --all --verbose
