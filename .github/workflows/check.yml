@@ -33,7 +33,7 @@ jobs:
           rustup toolchain install "$TOOLCHAIN" --component clippy
           rustup default "$TOOLCHAIN"
       - name: Cache
-        uses: Swatinem/rust-cache@6720f05bc48b77f96918929a9019fb2203ff71f8 # v2.0.0
+        uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
       - name: Compile
         run: cargo build --all-targets --locked --verbose
       - name: Test
